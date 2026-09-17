@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+hydrorisk.db
+hotspots_TRAINING_PANEL_DEDUP.csv

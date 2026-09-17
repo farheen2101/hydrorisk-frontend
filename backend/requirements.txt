@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pandas
+pydantic
+joblib
+xgboost==3.4.1 
