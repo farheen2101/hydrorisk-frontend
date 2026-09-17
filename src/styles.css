@@ -411,6 +411,40 @@ textarea::placeholder {
   min-width: 0;
 }
 
+/* ---------- Risk updates page ---------- */
+
+.riskupdates-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  align-items: start;
+}
+
+.update-row-clickable {
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.update-row-clickable:hover {
+  background: var(--color-surface-hover, rgba(255, 255, 255, 0.04));
+}
+
+.update-row-clickable:focus-visible {
+  outline: 2px solid var(--color-accent, #4f8cff);
+  outline-offset: 2px;
+}
+
+.update-row-clickable.is-selected {
+  background: var(--color-surface-hover, rgba(79, 140, 255, 0.1));
+}
+
+@media (max-width: 900px) {
+  .riskupdates-page {
+    grid-template-columns: 1fr;
+  }
+}
+
 .map-panel {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
