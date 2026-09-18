@@ -1,55 +1,207 @@
-# HydroRisk — Frontend
 
-React + Vite frontend for the HydroRisk citizen flood-risk dashboard, built to match
-the Figma reference and talk to the FastAPI backend in `main.py`.
+HydroRisk
+AI-Powered Urban Flood Risk & Citizen Reporting for Hyderabad.
 
-## What's here vs. the original mock
+HydroRisk turns live rainfall and terrain data into a street-level flood risk score for every hotspot in Hyderabad — and gives citizens a one-tap way to report flooding as it happens.
 
-- **Left sidebar promo card** now shows a Charminar photo instead of the water-tank
-  illustration (`src/components/PromoCard.jsx`). It loads from Wikimedia Commons by
-  default — swap in a local asset under `src/assets` if you'd rather bundle it.
-- **Sign In / Sign Up pages** (`src/pages/SignIn.jsx`, `SignUp.jsx`). The backend has
-  no auth routes yet, so these use a small client-side session
-  (`src/context/AuthContext.jsx`, stored in `localStorage`). Swap `signIn`/`signUp`
-  for real API calls once a `/login` / `/signup` endpoint exists.
-- **No chevron arrows** on the four bottom stat cards (Live Rainfall, Soil Saturation,
-  Flood Risk Level, Last Updated) — `src/components/StatsBar.jsx`.
-- **Photo upload on "Report Flooding Here"** (`src/components/PhotoUpload.jsx`, used
-  in `src/pages/ReportIssue.jsx`) — tap to take/choose a photo or drag one in, with a
-  preview and remove button. The backend's `CitizenReportCreate` schema
-  (`schemas.py`) doesn't have an image field yet, so the photo is captured
-  client-side and ready to send the moment the backend adds a multipart upload route
-  or an `image_url` column — see the comment in `ReportIssue.jsx`.
+🌐 Live Platform
+Live Application: hydrorisk-frontend.vercel.app Repository: github.com/farheen2101/hydrorisk-frontend
 
-## Setup
+✦ Why HydroRisk?
+Every monsoon, the same low-lying Hyderabad neighbourhoods flood — Balkampet, Malakpet, Nampally, and others — but residents get no advance, street-level warning. City-wide alerts don't tell you whether your road is at risk right now, and there's no easy way to tell your neighbours or the authorities that a spot has flooded.
 
-```bash
+HydroRisk closes that gap:
+
+Turn live rainfall data into a warning citizens can actually use — and turn citizen reports into ground truth the model can learn from.
+
+🔄 The Idea
+      RAINFALL DATA                TERRAIN / SLOPE DATA
+             │                              │
+             └──────────────┐  ┌────────────┘
+                            ▼  ▼
+                        ML Model (XGBoost)
+                            │
+                            ▼
+                     Live Risk Score (0–100)
+                            │
+                            ▼
+                  Citizen Map + Risk Search
+                            │
+                            ▼
+                    Report Flooding / Potholes
+                            │
+                            ▼
+                     Faster, Local Response
+✨ Core Features
+🗺️ Live Hotspot Map Colour-coded flood-risk markers across Hyderabad — Critical, Major, Moderate and Low — plotted on a stylised city map.
+
+🔍 Searchable Risk Updates Search any hotspot by name and instantly see its live risk score, rainfall reading and soil-saturation percentage.
+
+🤖 ML-Powered Risk Scoring An XGBoost model, trained on rainfall and slope/terrain features, scores every hotspot from 0–100 and assigns a severity level.
+
+📣 One-Tap Flood Reporting Citizens report flooding or potholes straight from the risk panel, with an optional photo attached.
+
+👤 Authentication Sign in / sign up to access the citizen dashboard.
+
+📚 Resources Safety information and community resources for residents.
+
+📱 Responsive Interface Designed to work consistently across desktop and mobile.
+
+🚀 How It Works
+01 — Sense Live rainfall, cumulative 5-day rainfall, and terrain/slope features feed the model.
+
+02 — Score The XGBoost model rates every hotspot's flood risk from 0–100.
+
+03 — Show The citizen dashboard displays a live map and a searchable list, colour-coded by severity.
+
+04 — Report Residents flag flooding or blocked roads directly from the app.
+
+05 — Respond Neighbours and authorities see the real-time picture and can act faster.
+
+Sense → Score → Show → Report → Respond
+🧩 The Concept
+                 LIVE RAINFALL
+                      │
+                      ▼
+               ┌─────────────┐
+               │  HydroRisk  │
+               └─────────────┘
+                      ▲
+                      │
+                 TERRAIN DATA
+Flood risk isn't just about how much it's raining — it's about where that water has nowhere to go. HydroRisk combines both signals into one score.
+
+🛠️ Technology Stack
+Layer	Technologies
+Frontend	React, Vite, JavaScript (JSX), CSS
+Backend	Python, FastAPI
+Database	SQLite
+ORM	SQLAlchemy
+Machine Learning	XGBoost, pandas, joblib
+Application Server	Uvicorn
+Deployment	Vercel (frontend), Render (backend)
+Version Control	Git, GitHub
+🏗️ Architecture
+                          HydroRisk
+                              │
+                 ┌────────────┴────────────┐
+                 │                         │
+             Frontend                   Backend
+          React + Vite                  FastAPI
+                                           │
+                              ┌────────────┴────────────┐
+                              │                         │
+                         SQLAlchemy               XGBoost Model
+                              │                         │
+                              ▼                         ▼
+                           SQLite               Risk Score (0–100)
+📁 Project Structure
+hydrorisk-frontend/
+│
+├── src/
+│   ├── components/     Sidebar, TopBar, MapPanel, RiskDetailsPanel, StatsBar, PhotoUpload...
+│   ├── pages/           MapView, RiskUpdates, ReportIssue, Resources, SettingsPage, SignIn, SignUp
+│   ├── context/         AuthContext (client-side session)
+│   ├── lib/
+│   │   └── api.js        fetch wrapper for /hotspots, /risk-scores, /reports
+│   ├── data/             Hyderabad bounding box + severity colours for marker placement
+│   └── styles.css
+│
+├── backend/
+│   ├── main.py           FastAPI app entrypoint
+│   ├── models.py         SQLAlchemy models
+│   ├── schemas.py        Pydantic request/response schemas
+│   ├── database.py       SQLite + SQLAlchemy session setup
+│   ├── data_loader.py    Loads the Hyderabad hotspot dataset
+│   ├── risk_model.py     Risk-scoring logic
+│   ├── predict_risk.py   Model inference
+│   ├── auth_utils.py     Password hashing & tokens
+│   ├── hotspots_MASTER_COMBINED.csv
+│   ├── hydrorisk_model_slope.pkl
+│   ├── requirements.txt
+│   ├── Procfile
+│   └── .python-version
+│
+├── .env.example
+├── vercel.json
+├── package.json
+└── vite.config.js
+⚙️ Getting Started
+Prerequisites
+Make sure the following are installed:
+
+Node.js 18+
+Python 3.11+
+Git
+1. Clone the Repository
+bash
+git clone https://github.com/farheen2101/hydrorisk-frontend.git
+cd hydrorisk-frontend/frontend
+2. Set Up the Backend
+bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+Runs at http://127.0.0.1:8000 — interactive API docs at /docs.
+
+3. Set Up the Frontend
+Open a second terminal:
+
+bash
 cd frontend
 npm install
 cp .env.example .env   # point at your backend if it's not on localhost:8000
 npm run dev
-```
+4. Open in Your Browser
+http://localhost:5173
+☁️ Deployment
+HydroRisk is deployed as two separate services:
 
-Runs the backend separately with `uvicorn main:app --reload` (see the backend's own
-README) — the frontend expects it at `http://127.0.0.1:8000` by default.
+GitHub
+   │
+   ├──▶ Vercel  ──▶  React + Vite frontend (static build)
+   │
+   └──▶ Render  ──▶  Uvicorn ──▶ FastAPI backend
+                                     │
+                                     ├── SQLite
+                                     └── XGBoost model
+🔐 Security
+HydroRisk follows standard web application practices, including:
 
-## Structure
+Password hashing for authentication
+CORS configured on the backend
+Environment-based configuration (.env, not committed to the repo)
+Sensitive configuration values are kept out of version control
+🌍 Use Cases
+Residents Check flood risk near home before stepping out during monsoon.
 
-```
-src/
-  components/   Sidebar, TopBar, MapPanel, RiskDetailsPanel, StatsBar, PhotoUpload...
-  pages/        MapView, RiskUpdates, ReportIssue, Resources, SettingsPage, SignIn, SignUp
-  context/      AuthContext (client-side session)
-  lib/api.js    fetch wrapper for /hotspots, /risk-scores, /reports
-  data/         Hyderabad bounding box + severity colors for marker placement
-  styles.css    single global stylesheet
-```
+Commuters Avoid routes through flooded or high-risk areas.
 
-## Notes
+Local Authorities See a live, street-level risk picture instead of city-wide guesses.
 
-- The map is a stylized panel (matching the mock), not real map tiles — hotspot pins
-  are positioned by projecting lat/long onto a Hyderabad bounding box
-  (`src/data/hyderabadBounds.js`). Swap in Leaflet/Mapbox later if you want real
-  tiles; the marker data (`getRiskScores()`) is already shaped for it.
-- Routes `/`, `/risk-updates`, `/report`, `/resources`, `/settings` require a signed-in
-  session and redirect to `/signin` otherwise.
+Emergency Responders Prioritise the most critical hotspots first.
+
+📈 Future Roadmap
+ SMS / push alerts for Critical-risk areas
+ Live IMD rainfall feed integration
+ Photo verification for citizen reports
+ Expand hotspot coverage beyond Hyderabad
+ Real map tiles (Leaflet / Mapbox) instead of the stylised panel
+🤝 Team
+Name	Role
+Farheen Begum	Team Lead & Frontend Developer
+Zeba Nazneen	Backend & ML Engineer
+Umaima	Data & Research
+Sania	Documentation & QA
+🤝 Contributing
+bash
+git checkout -b feature/your-feature
+git add .
+git commit -m "Add your feature"
+git push origin feature/your-feature
+Then open a Pull Request.
+
+📜 License
+This project was built as a student/hackathon project and is provided for educational purposes.
+
+HydroRisk Turning rainfall into warning, and warning into action.
